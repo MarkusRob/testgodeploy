@@ -1,162 +1,162 @@
-# Generate and improve code with Azure OpenAI Service
+PAGE 1
+===
+test
+===
+#### Lab 1 - Create a virtual machine in the portal
 
-
-
-
-1. [ ] Replace the comment ***Add code to send request...*** with the necessary code for building the request; specifying the various parameters for your model such as `messages` and `temperature`.
-
-    **C#**: Program.cs
-
-    ```csharp
-    // Add code to send request...
-    // Build completion options object
-    ChatCompletionsOptions chatCompletionsOptions = new ChatCompletionsOptions()
-    {
-        Messages =
-        {
-            new ChatRequestSystemMessage(systemMessage),
-            new ChatRequestUserMessage(inputText),
-        },
-        MaxTokens = 400,
-        Temperature = 0.7f,
-        DeploymentName = oaiDeploymentName
-    };
-
-    // Send request to Azure OpenAI model
-    ChatCompletions response = client.GetChatCompletions(chatCompletionsOptions);
-
-    // Print the response
-    string completion = response.Choices[0].Message.Content;
-    Console.WriteLine("Response: " + completion + "\n");
-    ```
-
-    **Python**: test-openai-model.py
-
-    ```python
-    # Add code to send request...
-    # Send request to Azure OpenAI model
-    response = client.chat.completions.create(
-        model=azure_oai_deployment,
-        temperature=0.7,
-        max_tokens=400,
-        messages=[
-            {"role": "system", "content": system_message},
-            {"role": "user", "content": input_text}
-        ]
-    )
-    generated_text = response.choices[0].message.content
-
-    # Print the response
-    print("Response: " + generated_text + "\n")
-    ```
-
-1. [ ] Save the changes to your code file.
-
-## Test your application
+`singleBacktick`
+```tripleBacktick```
 
 ::: secondary
-Now that your app has been configured, run it to send your request to your model and observe the response.
+**Scenario**
+
+In this walkthrough, we will create a virtual machine in the Azure Portal, connect to the virtual machine, install the web server role and test. 
+:::
+
+::: warning
+**Note**: Take time during this walk-through to click and read the Informational icons. 
 :::
 
 
-::: secondary
-The Azure OpenAI Service models can generate code for you using natural language prompts, fixing bugs in completed code, and providing code comments. These models can also explain and simplify existing code to help you understand what it does and how to improve it.
-:::
+##### Task 1: Create the virtual machine
 
-## Provision an Azure OpenAI resource
 
 ::: secondary
-If you don't already have one, provision an Azure OpenAI resource in your Azure subscription.
+In this task, we will create a Windows Server virtual machine in Azure. 
 :::
-1. [ ] Sign into the **Azure portal** using your credentials.
-2. [ ] Create an **Azure OpenAI** resource with the following settings:
+===
+1. [ ] If necessary, send the **$gd.fn.sendVmKeyCombo(CTRL+ALT+DEL)** command and then sign in to the **$gd.fn.selectVm(LON-CL1)** as virtual machine as **[`Admin`](urn:gd:lg:a:send-vm-keys)** with the password **[`Pa55w.rd`](urn:gd:lg:a:send-vm-keys)**. 
 
-    - **Subscription**: Select your subscription
+1. [ ] Once logged in, open your choice of web browser and sign in to the **Azure portal** by navigating to **[https://portal.azure.com](urn:gd:lg:a:send-vm-keys)** and entering the following Azure Credentials:
 
-    - **Resource group**: Select your resource group
-    - **Region**: East US
-    - **Name**: *A unique name of your choice*
-    - **Pricing tier**: Standard S0
+    - Username: **[`$gd.com(azure).username`](urn:gd:lg:a:send-vm-keys)**
+    - Password: **[`$gd.com(azure).password`](urn:gd:lg:a:send-vm-keys)**
 
-     \* Azure OpenAI resources are constrained by regional quotas. Randomly choosing a region reduces the risk of a single region reaching its quota limit in scenarios where you are sharing a subscription with other users. In the event of a quota limit being reached later in the exercise, there's a possibility you may need to create another resource in a different region.
 
-3. [ ] Wait for deployment to complete. Then go to the deployed Azure OpenAI resource in the Azure portal.
+2. [ ] On **Stay signed in?** select **Yes**.
 
-## Deploy a model
+3. [ ] From the **All services** blade in the Portal Menu, search for and select **Virtual machines**, and then click **+Create** and choose **+Azure Virtual machine** from the drop down.
+
+3. [ ] On the **Basics** tab, fill in the following information (leave the defaults for everything else):
+
+    | Settings | Values |
+    |  -- | -- |
+    | Subscription | **$gd.com(azure).subscriptionName** |
+    | Resource group | **$gd.com(azure).resourceGroups(myRGVM)** |
+    | Virtual machine name | **[`myVM`](urn:gd:lg:a:send-vm-keys)** |
+    | Region | **(US) East US**|
+    | Availability options | No infrastructure redundancy required|
+    | Security type | Standard | 
+    | Image | **Windows Server 2019 Datacenter - x64 Gen2**|
+    | Size | **Standard D2s v3**|
+    | Administrator account username | **[`azureuser`](urn:gd:lg:a:send-vm-keys)** |
+    | Administrator account password (type in carefully!) | **[`$gd.com(azure).password`](urn:gd:lg:a:send-vm-keys)** |
+    | Public inbound port  | **Allow select ports** |
+    | Select inbound ports | **RDP (3389)** and **HTTP (80)**| 
+4. [ ] Switch to the **Networking** tab, and look for the **Select inbound ports**:
+
+    ::: warning
+    **Note** - Verify that both port 80 and 3389 are selected.
+    :::
+
+    | Settings | Values |
+    | -- | -- |
+    | Select inbound ports | **HTTP (80), RDP (3389)**|
+
+
+
+5. [ ] Switch to the **Monitoring** tab and select the following setting:
+
+    | Settings | Values |
+    | -- | -- |
+    | Boot diagnostics | **Disable**|
+
+6. [ ] Leave the remaining defaults and then click the **Review + create** button at the bottom of the page.
+
+7. [ ] Once Validation is passed click the **Create** button. 
+
+    ::: warning
+    **Note**: It can often take anywhere from five to seven minutes to deploy the virtual machine.
+    :::
+
+
+8. [ ] You will receive updates on the deployment page and via the **Notifications** area (the bell icon in the top menu).
+
+    ::: info
+    **Verify Port 80 and 3389 were opened**
+    :::
+
+##### Task 2: Connect to the virtual machine
+
+1. [ ] Click on bell icon from the upper blue toolbar, and select **Go to resource** when your deployment has succeded. 
+
+    ::: warning
+        **Note**: You could also use the **Go to resource** link on the deployment page 
+    :::
+
+2. [ ] On the virtual machine **Overview** blade, click the **Connect** button.
+
+    ::: warning
+    **Note**: The following directions tell you how to connect to your VM from a Windows computer. On a Mac, you need an RDP client such as this Remote Desktop Client from the Mac App Store and on Linux virtual machine you could connect directly from a bash shell using `ssh`.
+    :::
+
+
+2. [ ] On the **myVM | Connect** page, scroll down and click on **Select** under **Native RDP**.
+
+3. [ ] In the pane that appears, select **Download RDP file** under step 3. Open the file once downloaded and click **Connect**.
+
+    ![Screenshot](https://gdlabresourceseastus01.blob.core.windows.net/labguideimages/AZ-900T00/All-Labs/020b314c-3278-4e2f-bc9e-24cd2a4f13af.png)
+
+4. [ ] In the **Windows Security** window, sign in using the Admin Credentials you used when creating your VM **[`azureuser`](urn:gd:lg:a:send-vm-keys)** and the password **[`$gd.com(azure).password`](urn:gd:lg:a:send-vm-keys)**. 
+
+5. [ ] You may receive a warning certificate during the sign-in process. Click **Yes** or to create the connection and connect to your deployed VM. You should connect successfully.
+
+
+::: success
+**Congratulations**! You have deployed and connected to a Windows Server virtual machine in Azure
+:::
+
+##### Task 3: Install the web server role and test
 
 ::: secondary
-Azure OpenAI provides a web-based portal named **Azure OpenAI Studio**, that you can use to deploy, manage, and explore models. You'll start your exploration of Azure OpenAI by using Azure OpenAI Studio to deploy a model.
+In this task, install the Web Server role on the server on the Virtual Machine you just created and ensure the default IIS welcome page will be displayed. 
 :::
 
-1. [ ] On the **Overview** page for your Azure OpenAI resource, use the **Go to Azure OpenAI Studio** button to open Azure OpenAI Studio in a new browser tab.
-2. [ ] In Azure OpenAI Studio, on the **Deployments** page, view your existing model deployments. If you don't already have one, create a new deployment of the **gpt-35-turbo-16k** model with the following settings:
+1. [ ] In the newly opened virtual machine, launch PowerShell by searching **[`PowerShell`](urn:gd:lg:a:send-vm-keys)** in the search bar, when found right click **Windows PowerShell** to **Run as administrator**.
 
-    - **Model**: gpt-35-turbo-16k *(if the 16k model isn't available, choose gpt-35-turbo)*
+    ![Screenshot](https://gdlabresourceseastus01.blob.core.windows.net/labguideimages/AZ-900T0Xv2-(CS)/Lab-1/a9cc6a14-acb4-4df4-ba2b-2d8d350292ac.png)
 
-    - **Model version**: Auto-update to default
-    - **Deployment name**: *A unique name of your choice*
+2. [ ] In PowerShell, install the **Web-Server** feature on the virtual machine by running the following command. 
 
-    - **Advanced options**
+    ```PowerShell
+    Install-WindowsFeature -name Web-Server -IncludeManagementTools
+    ```
 
-        - **Content filter**: Default
+3. [ ] When completed, a prompt will state **Success** with a value **True**. You do not need to restart the virtual machine to complete the installation. Close the RDP connection to the VM by clicking the **x** on the blue bar at the top center of your virtual machine. You can also minimize it by clicking the **-** on the blue bar at the top center.
 
-        - **Tokens per minute rate limit**: 5K\*
-        - **Enable dynamic quota**: Enabled
+    ![Screenshot](https://gdlabresourceseastus01.blob.core.windows.net/labguideimages/AZ-900T0Xv2-(CS)/Lab-1/26208d15-f3a0-443b-952d-9bdb6173160a.png)
 
-     \* A rate limit of 5,000 tokens per minute is more than adequate to complete this exercise while leaving capacity for other people using the same subscription.
+4. [ ] Back in the portal, navigate back to the **Overview** blade of myVM and, use the **Copy to clipboard** button to copy the public IP address of myVM, then open a new browser tab, paste the public IP address into the URL text box, and press the **Enter** key to browse to it.
 
-## Generate code in chat playground
+    ![Screenshot](https://gdlabresourceseastus01.blob.core.windows.net/labguideimages/AZ-900T0Xv2-(CS)/Lab-1/599bcece-663f-49a9-aa87-4263539cb94b.png)
 
-::: secondary
-Before using in your app, examine how Azure OpenAI can generate and explain code in the chat playground.
+5. [ ] The default IIS Web Server welcome page will be displayed.
+
+    ![Screenshot](https://gdlabresourceseastus01.blob.core.windows.net/labguideimages/AZ-900T0Xv2-(CS)/Lab-1/a2553b64-7bd1-48b8-96b9-74fcf6a38b70.png)
+
+::: success
+**Congratulations!** You have created a new VM running a web server that is accessible via its public IP address. If you had a web application to host, you could deploy application files to the virtual machine and host them for public access on the deployed virtual machine.
 :::
 
-1. [ ] In [**Azure OpenAI Studio** !!https://oai.azure.com!!, in the **Playground** section, select the **Chat** page. The **Chat** playground page consists of three main sections:
 
-    - **Assistant setup** - used to set the context for the model's responses.
 
-    - **Chat session** - used to submit chat messages and view responses.
-    - **Configuration** - used to configure settings for the model deployment.
+/page 
+$gd.lab.courseName
+asdasdas
+/page
 
-2. [ ] In the **Configuration** section, ensure that your model deployment is selected.
-3. [ ] In the **Assistant setup** area, set the system message to !!You are a programming assistant helping write code!! and save the changes.
-4. [ ] In the **Chat session**, submit the following query:
 
-    ```
-    Write a function in python that takes a character and a string as input, and returns how many times the character appears in the string
-    ```
 
-    The model will likely respond with a function, with some explanation of what the function does and how to call it.
-
-5. [ ] Next, send the prompt !!Do the same thing, but this time write it in C#!!.
-
-    The model likely responded very similarly as the first time, but this time coding in C#. You can ask it again for a different language of your choice, or a function to complete a different task such as reversing the input string.
-
-6. [ ] Next, let's explore using AI to understand code. Submit the following prompt as the user message.
-
-    ```
-    What does the following function do?  
-    ---  
-    def multiply(a, b):  
-        result = 0  
-        negative = False  
-        if a < 0 and b > 0:  
-            a = -a  
-            negative = True  
-        elif a > 0 and b < 0:  
-            b = -b  
-            negative = True  
-        elif a < 0 and b < 0:  
-            a = -a  
-            b = -b  
-        while b > 0:  
-            result += a  
-            b -= 1      
-        if negative:  
-            return -result  
-        else:  
-            return result  
-    ```
 
 ![Free Tom Smacking his Head](./media/Image.jpg)
 
