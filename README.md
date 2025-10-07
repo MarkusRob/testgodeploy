@@ -1,5 +1,64 @@
 # Generate and improve code with Azure OpenAI Service
 
+
+
+
+1. [ ] Replace the comment ***Add code to send request...*** with the necessary code for building the request; specifying the various parameters for your model such as `messages` and `temperature`.
+
+    **C#**: Program.cs
+
+    ```csharp
+    // Add code to send request...
+    // Build completion options object
+    ChatCompletionsOptions chatCompletionsOptions = new ChatCompletionsOptions()
+    {
+        Messages =
+        {
+            new ChatRequestSystemMessage(systemMessage),
+            new ChatRequestUserMessage(inputText),
+        },
+        MaxTokens = 400,
+        Temperature = 0.7f,
+        DeploymentName = oaiDeploymentName
+    };
+
+    // Send request to Azure OpenAI model
+    ChatCompletions response = client.GetChatCompletions(chatCompletionsOptions);
+
+    // Print the response
+    string completion = response.Choices[0].Message.Content;
+    Console.WriteLine("Response: " + completion + "\n");
+    ```
+
+    **Python**: test-openai-model.py
+
+    ```python
+    # Add code to send request...
+    # Send request to Azure OpenAI model
+    response = client.chat.completions.create(
+        model=azure_oai_deployment,
+        temperature=0.7,
+        max_tokens=400,
+        messages=[
+            {"role": "system", "content": system_message},
+            {"role": "user", "content": input_text}
+        ]
+    )
+    generated_text = response.choices[0].message.content
+
+    # Print the response
+    print("Response: " + generated_text + "\n")
+    ```
+
+1. [ ] Save the changes to your code file.
+
+## Test your application
+
+::: secondary
+Now that your app has been configured, run it to send your request to your model and observe the response.
+:::
+
+
 ::: secondary
 The Azure OpenAI Service models can generate code for you using natural language prompts, fixing bugs in completed code, and providing code comments. These models can also explain and simplify existing code to help you understand what it does and how to improve it.
 :::
